@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.turnoverprediction.api.PostRequest
+import com.example.turnoverprediction.api.RequestModelClass
 import com.example.turnoverprediction.api.ResultResponse
 import com.example.turnoverprediction.api.RetorfitInstance
 import com.example.turnoverprediction.databinding.ActivityPredictionBinding
@@ -23,13 +24,17 @@ class PredictionActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val postRequestRetrofit = PostRequest("data")
         setContentView(binding.root)
-        val postRequest = PostRequest("John Doe")
+        binding.apply {
+            val reqModel = RequestModelClass( SatisfactionLevelEt.text.toString(), lastEvaluationEt.text.toString(), noOfProjects.text.toString(),AverageMonthlyHours.text.toString(), timeSpendCompany.text.toString(),workAccident.text.toString(),promotionLastYear.text.toString())
+            val postRequestReterofit = PostRequst(reqModel)
+        }
 
         binding.submit.setOnClickListener{
             checkValidations()
         }
-        RetorfitInstance.api.postData(postRequest).enqueue(object : Callback<ResultResponse> {
+        RetorfitInstance.api.postData(postRequestRetrofit).enqueue(object : Callback<ResultResponse> {
             override fun onResponse(
                 call: Call<ResultResponse>,
                 response: Response<ResultResponse>
@@ -71,7 +76,7 @@ class PredictionActivity : AppCompatActivity() {
                                         val workaccident = workAccident.text.toString()
                                         val promotion = promotionLastYear.text.toString()
                                         val workAccidentValue = if (workaccident.equals("yes", ignoreCase = true)) true else false
-                                        val promotionValue = if (promotion.equals("yes", ignoreCase = true)) true else if (promotion.equals("no", ignoreCase = true)) false else throw IllegalArgumentException("promotion must be either 'yes' or 'no'")
+                                        val promotionValue = if (promotion.equals("yes", ignoreCase = true)) true else false
 //                                          GetResult.predictEmployeeTurnover()
                                         val result = predictEmployeeTurnover(satisfaction, evaluation, noofproject, averagehours, timespend, workAccidentValue, promotionValue)
 
@@ -150,6 +155,10 @@ class PredictionActivity : AppCompatActivity() {
             return false
         }
 
+    }
+
+    fun PostRequst(req: RequestModelClass){
+        
     }
 
 
