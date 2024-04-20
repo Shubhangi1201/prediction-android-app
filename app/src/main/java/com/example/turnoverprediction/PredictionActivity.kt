@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.example.turnoverprediction.api.PostRequest
 import com.example.turnoverprediction.api.ResultResponse
 import com.example.turnoverprediction.api.RetorfitInstance
@@ -37,6 +38,7 @@ class PredictionActivity : AppCompatActivity() {
                     val postResponse = response.body()
                     val result = postResponse?.result
                     Log.d("abc", "$result")
+
 
                     // do something with the result
                 }
@@ -72,6 +74,16 @@ class PredictionActivity : AppCompatActivity() {
                                         val promotionValue = if (promotion.equals("yes", ignoreCase = true)) true else if (promotion.equals("no", ignoreCase = true)) false else throw IllegalArgumentException("promotion must be either 'yes' or 'no'")
 //                                          GetResult.predictEmployeeTurnover()
                                         val result = predictEmployeeTurnover(satisfaction, evaluation, noofproject, averagehours, timespend, workAccidentValue, promotionValue)
+
+                                        if(result == true){
+                                            resultTV.visibility = View.VISIBLE
+                                            resultTV.setTextColor(ContextCompat.getColor(this@PredictionActivity, R.color.truecolor))
+                                            resultTV.text = "Employee will leave the company"
+                                        }else{
+                                            resultTV.visibility = View.VISIBLE
+                                            resultTV.setTextColor(ContextCompat.getColor(this@PredictionActivity, R.color.falsecolor))
+                                            resultTV.text = "Employee will stay in company"
+                                        }
                                         Toast.makeText(applicationContext, "${result.toString()}", Toast.LENGTH_SHORT)
                                             .show()
                                        
@@ -131,6 +143,8 @@ class PredictionActivity : AppCompatActivity() {
 
 
         if(satisfactionLevelValue<highSatisfactionLevel && lastEvaluationValue<lowLastEvaluation && numberOfProjectsValue>manyProjects && averageMonthlyHoursValue>highAverageMonthlyHours && workAccident && !promotionInLastFiveYears){
+            return true
+        }else if(satisfactionLevelValue<highSatisfactionLevel && lastEvaluationValue>lowLastEvaluation && numberOfProjectsValue>manyProjects && !promotionInLastFiveYears){
             return true
         }else{
             return false
