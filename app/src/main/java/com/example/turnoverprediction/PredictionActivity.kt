@@ -10,6 +10,7 @@ import com.example.turnoverprediction.api.PostRequest
 import com.example.turnoverprediction.api.ResultResponse
 import com.example.turnoverprediction.api.RetorfitInstance
 import com.example.turnoverprediction.databinding.ActivityPredictionBinding
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,12 +42,13 @@ class PredictionActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResultResponse>, t: Throwable) {
                 Log.d("abc", "${t.message.toString()}")
 
-
             }
 
         })
 
         }
+
+
 
 
 
