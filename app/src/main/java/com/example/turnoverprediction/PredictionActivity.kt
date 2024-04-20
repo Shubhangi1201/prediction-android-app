@@ -25,6 +25,9 @@ class PredictionActivity : AppCompatActivity() {
         setContentView(binding.root)
         val postRequest = PostRequest("John Doe")
 
+        binding.submit.setOnClickListener{
+            checkValidations()
+        }
         RetorfitInstance.api.postData(postRequest).enqueue(object : Callback<ResultResponse> {
             override fun onResponse(
                 call: Call<ResultResponse>,
@@ -47,6 +50,44 @@ class PredictionActivity : AppCompatActivity() {
         })
 
         }
+
+    private fun checkValidations(){
+        binding.apply {
+            if(!SatisfactionLevelEt.text.toString().isNullOrEmpty()){
+                if(!lastEvaluationEt.text.toString().isNullOrEmpty()){
+                    if(!noOfProjects.text.toString().isNullOrEmpty()){
+                        if(!AverageMonthlyHours.text.toString().isNullOrEmpty()){
+                            if(!timeSpendCompany.text.toString().isNullOrEmpty()){
+                                if(!workAccident.text.toString().isNullOrEmpty()){
+                                    if(!promotionLastYear.text.toString().isNullOrEmpty()){
+                                        GetResult.getFinalResult()
+                                    }else{
+                                        lastEvaluationEt.setError("This field cannot be empty")
+                                    }
+                                }else{
+                                    lastEvaluationEt.setError("This field cannot be empty")
+                                }
+                            }else{
+                                lastEvaluationEt.setError("This field cannot be empty")
+                            }
+                        }else{
+                            lastEvaluationEt.setError("This field cannot be empty")
+                        }
+                    }else{
+                        lastEvaluationEt.setError("This field cannot be empty")
+                    }
+                }else{
+                    lastEvaluationEt.setError("This field cannot be empty")
+                }
+            }else{
+                SatisfactionLevelEt.setError("This feild cannot be empty")
+            }
+        }
+    }
+
+
+
+
 
 
 
